@@ -1,8 +1,9 @@
 const displayBox = document.querySelector('.display');
 const numberBtn = document.querySelectorAll('.number');
-const operatorBtn = document.querySelectorAll('.operator')
-const clearBtn = document.getElementById('clear')
+const operatorBtn = document.querySelectorAll('.operator');
+const clearBtn = document.getElementById('clear');
 const equalBtn = document.getElementById('equal');
+const backspaceBtn = document.getElementById('backspace');
 
 //Functions for each basic math operator to be called later on.  
 
@@ -43,6 +44,8 @@ function operate (operator, num1, num2){
 
 clearBtn.addEventListener('click', function(){
     displayBox.textContent = '';
+    newNum = '';
+    storedNum = '';
 });
 
 let newNum = '';
@@ -64,9 +67,8 @@ numberBtn.forEach((number) => {
 
 operatorBtn.forEach((operator) => {
     operator.addEventListener('click', function() {
-        if (newNum && storedNum){  //If storedNum exists, it allows the operat() to be carried out when an operator btn is clicked again.
+        if (newNum && storedNum){  //If storedNum exists, it allows the operate() to be carried out when an operator btn is clicked again.
             equality();
-            console.log('hello'); 
         }
 
         storedNum = newNum;
@@ -79,8 +81,10 @@ operatorBtn.forEach((operator) => {
 });
 
 equalBtn.addEventListener('click', function(){
-    equality();
-    
+    if (newNum && storedNum){
+        equality();
+        storedNum = ''
+    }
 });
 
 function equality(){
@@ -89,3 +93,9 @@ function equality(){
     console.log(newNum);
 
 }
+
+backspaceBtn.addEventListener('click', function(){
+    newNum = newNum.toString();
+    newNum = newNum.slice(0, -1);
+    newNum = parseInt(newNum);
+})
