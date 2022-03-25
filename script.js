@@ -4,6 +4,7 @@ const operatorBtn = document.querySelectorAll('.operator');
 const clearBtn = document.getElementById('clear');
 const equalBtn = document.getElementById('equal');
 const backspaceBtn = document.getElementById('backspace');
+const minusBtn = document.getElementById('minus');
 
 //Functions for each basic math operator to be called later on.  
 
@@ -52,6 +53,8 @@ let newNum = '';
 let storedNum;
 let opSelected = '';
 let clickCount = 0;
+let isMinus = '';
+let minusClick = 0;
 
 //Allows each button's number to be displayed when button clicked. Given that 
 //querySelector returns a NodeList, which can use array.forEach to decipher the  
@@ -60,15 +63,31 @@ let clickCount = 0;
 numberBtn.forEach((number) => {
     number.addEventListener('click', function() {
         if (clickCount || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
+            console.log(newNum);
             newNum = '';
         }
+
+        if (minusClick > 0){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
+            newNum = isMinus;
+        }
+        
         newNum += number.value;
         newNum = Number(newNum); //converts newNum from string to number.
         displayBox.textContent = newNum;
+        
         clickCount = 0;
+        minusClick = 0;
+        isMinus = '';
     })
 });
-  
+
+minusBtn.addEventListener('click', function(){
+    if (newNum === '' || isNaN(newNum)){
+        isMinus = '-';
+        displayBox.textContent = isMinus;
+        minusClick++;
+    }
+})
 
 operatorBtn.forEach((operator) => {
     operator.addEventListener('click', function() {
@@ -91,7 +110,7 @@ equalBtn.addEventListener('click', function(){
 
 function equality(){
     newNum = operate(opSelected, storedNum, newNum);
-    if (newNum === Infinity){
+    if (newNum === Infinity){  //Prevents crashing when dividing a number by zero
         displayBox.textContent = 'Error';
         newNum = '';
         storedNum = '';
@@ -106,3 +125,4 @@ backspaceBtn.addEventListener('click', function(){
     displayBox.textContent = newNum;
     newNum = parseInt(newNum);
 })
+
