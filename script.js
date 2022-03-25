@@ -59,7 +59,7 @@ let clickCount = 0;
 
 numberBtn.forEach((number) => {
     number.addEventListener('click', function() {
-        if (clickCount){
+        if (clickCount || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
             newNum = '';
         }
         newNum += number.value;
@@ -103,5 +103,6 @@ function equality(){
 backspaceBtn.addEventListener('click', function(){
     newNum = newNum.toString();
     newNum = newNum.slice(0, -1);
+    displayBox.textContent = newNum;
     newNum = parseInt(newNum);
 })
