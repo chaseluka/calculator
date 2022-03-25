@@ -5,6 +5,7 @@ const clearBtn = document.getElementById('clear');
 const equalBtn = document.getElementById('equal');
 const backspaceBtn = document.getElementById('backspace');
 const minusBtn = document.getElementById('minus');
+const decimalBtn = document.getElementById('decimal');
 
 //Functions for each basic math operator to be called later on.  
 
@@ -52,9 +53,11 @@ clearBtn.addEventListener('click', function(){
 let newNum = '';
 let storedNum;
 let opSelected = '';
-let clickCount = 0;
+let equalClick = 0;
 let isMinus = '';
 let minusClick = 0;
+let decimalClick = 0;
+let decimal = '.';
 
 //Allows each button's number to be displayed when button clicked. Given that 
 //querySelector returns a NodeList, which can use array.forEach to decipher the  
@@ -62,22 +65,23 @@ let minusClick = 0;
 
 numberBtn.forEach((number) => {
     number.addEventListener('click', function() {
-        if (clickCount || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
-            console.log(newNum);
+        if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
             newNum = '';
+            decimalClick = 0;
         }
 
-        if (minusClick > 0){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
+        if (minusClick){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
             newNum = isMinus;
+            isMinus = '';
         }
         
         newNum += number.value;
-        newNum = Number(newNum); //converts newNum from string to number.
+        newNum = parseFloat(newNum); //converts newNum from string to number.
         displayBox.textContent = newNum;
         
-        clickCount = 0;
+        equalClick = 0;
         minusClick = 0;
-        isMinus = '';
+        
     })
 });
 
@@ -89,19 +93,31 @@ minusBtn.addEventListener('click', function(){
     }
 })
 
+decimalBtn.addEventListener('click', function(){
+    if (decimalClick < 1){
+        decimalClick++;
+        newNum = newNum.toString();
+        newNum = newNum.concat(decimal)
+        displayBox.textContent = newNum;
+        console.log(newNum);
+    }
+});
+
 operatorBtn.forEach((operator) => {
     operator.addEventListener('click', function() {
+        newNum = parseFloat(newNum);
         if (newNum && storedNum){  //If storedNum exists, it allows the operate() to be carried out when an operator btn is clicked again.
             equality();
         }
         storedNum = newNum;
         newNum = '';
         opSelected = operator.value;
+        decimalClick = 0;
     })
 });
 
 equalBtn.addEventListener('click', function(){
-    ++clickCount;
+    ++equalClick;
     if (newNum !== undefined && storedNum !== undefined){
         equality();
         storedNum = '';
@@ -115,7 +131,7 @@ function equality(){
         newNum = '';
         storedNum = '';
     }
-    newNum = Number((newNum).toFixed(8)); //Rounds decimal to only 8 spots.
+    newNum = parseFloat((newNum).toFixed(8)); //Rounds decimal to only 8 spots.
     displayBox.textContent = newNum;
 }
 
@@ -125,4 +141,3 @@ backspaceBtn.addEventListener('click', function(){
     displayBox.textContent = newNum;
     newNum = parseInt(newNum);
 })
-
