@@ -51,6 +51,7 @@ clearBtn.addEventListener('click', function(){
 let newNum = '';
 let storedNum;
 let opSelected = '';
+let clickCount = 0;
 
 //Allows each button's number to be displayed when button clicked. Given that 
 //querySelector returns a NodeList, which can use array.forEach to decipher the  
@@ -58,9 +59,13 @@ let opSelected = '';
 
 numberBtn.forEach((number) => {
     number.addEventListener('click', function() {
+        if (clickCount){
+            newNum = '';
+        }
         newNum += number.value;
         newNum = Number(newNum); //converts newNum from string to number.
-        console.log(newNum);
+        displayBox.textContent = newNum;
+        clickCount = 0;
     })
 });
   
@@ -70,28 +75,29 @@ operatorBtn.forEach((operator) => {
         if (newNum && storedNum){  //If storedNum exists, it allows the operate() to be carried out when an operator btn is clicked again.
             equality();
         }
-
         storedNum = newNum;
-        console.log(storedNum);
         newNum = '';
         opSelected = operator.value;
-        
-        
     })
 });
 
 equalBtn.addEventListener('click', function(){
-    if (newNum && storedNum){
+    ++clickCount;
+    if (newNum !== undefined && storedNum !== undefined){
         equality();
-        storedNum = ''
+        storedNum = '';
     }
 });
 
 function equality(){
     newNum = operate(opSelected, storedNum, newNum);
+    if (newNum === Infinity){
+        displayBox.textContent = 'Error';
+        newNum = '';
+        storedNum = '';
+    }
     newNum = Number((newNum).toFixed(8)); //Rounds decimal to only 8 spots.
-    console.log(newNum);
-
+    displayBox.textContent = newNum;
 }
 
 backspaceBtn.addEventListener('click', function(){
