@@ -16,7 +16,8 @@ body {
     box-shadow: 3px 3px 3px 3px #333;
     margin-top: 80px;
     border-radius: 15px;
-    padding-left: 3px;
+    padding-left: 10px;
+    padding-bottom: 10px;
     
 
 }
@@ -27,22 +28,22 @@ body {
 }
 
 .display {
-    background: #888;
+    background: #939393;
     grid-column-start: 1;
     grid-column-end: end;
     grid-row-start: 1;
     grid-row-end: 3;
     border-radius: 15px;
-    margin: 5px;
+    margin: 5px 10px 5px 5px;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .display-text {
-    padding-right: 5px;
-    font-size: 28px;
-    color: #fff;
+    padding: 8px;
+    font-size: 45px;
+    color: #292929;
 }
 
 #clear, #backspace, #divide {
@@ -67,4 +68,33 @@ body {
 
 button {
     border-radius: 30px;
+    border: none;
+    font-size: 25px;
+}
+
+.on, #equal {
+    background-color: #5552eea8;
+    color: #eee;
+}
+
+#clear, #backspace {
+    background-color: #696969;
+    color: #ccc;
+}
+
+.number, #decimal {
+    background-color: #ccc;
+    color: #111;
+}
+
+.number:hover, #decimal:hover {
+    background-color: #9a9a9a;
+}
+
+.operator:hover, #equal:hover {
+    background-color: #5262ee;
+}
+
+#clear:hover, #backspace:hover {
+    background-color: #888;
 }

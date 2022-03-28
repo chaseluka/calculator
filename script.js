@@ -77,35 +77,13 @@ numberBtn.forEach((number) => {
         }
         
         newNum += number.value;
+
         newNum = parseFloat(newNum); //converts newNum from string to number.
         displayBox.textContent = newNum;
         
         equalClick = 0;
         minusClick = 0;
         
-    }));
-
-    else if (number.addEventListener('keypress', function(e){
-        console.log(e);
-        if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
-            newNum = '';
-            decimalClick = 0;
-        }
-
-        if (minusClick){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
-            newNum = isMinus;
-            isMinus = '';
-        }
-        
-        if(number.value == e.key){
-            newNum += number.value;
-        }
-        
-        newNum = parseFloat(newNum); //converts newNum from string to number.
-        displayBox.textContent = newNum;
-        
-        equalClick = 0;
-        minusClick = 0;
     }));
 });
 
@@ -136,6 +114,7 @@ operatorBtn.forEach((operator) => {
         newNum = '';
         opSelected = operator.value;
         decimalClick = 0;
+        opStored = operator;
     })
 });
 
@@ -144,6 +123,7 @@ equalBtn.addEventListener('click', function(){
     if (newNum !== undefined && storedNum !== undefined){
         equality();
         storedNum = '';
+
     }
 });
 
@@ -153,6 +133,9 @@ function equality(){
         displayBox.textContent = 'Error';
         newNum = '';
         storedNum = '';
+    }
+    if (newNum.length > 14){
+        newNum = newNum.substring(0, 14);
     }
     newNum = parseFloat((newNum).toFixed(8)); //Rounds decimal to only 8 spots.
     displayBox.textContent = newNum;
@@ -164,3 +147,4 @@ backspaceBtn.addEventListener('click', function(){
     displayBox.textContent = newNum;
     newNum = parseInt(newNum);
 })
+
