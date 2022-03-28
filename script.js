@@ -1,4 +1,4 @@
-const displayBox = document.querySelector('.display');
+const displayBox = document.querySelector('.display-text');
 const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
 const clearBtn = document.getElementById('clear');
@@ -6,6 +6,7 @@ const equalBtn = document.getElementById('equal');
 const backspaceBtn = document.getElementById('backspace');
 const minusBtn = document.getElementById('minus');
 const decimalBtn = document.getElementById('decimal');
+const numberKey = document.querySelectorAll('.number');
 
 //Functions for each basic math operator to be called later on.  
 
@@ -64,7 +65,7 @@ let decimal = '.';
 //number associated with the button and display its value.
 
 numberBtn.forEach((number) => {
-    number.addEventListener('click', function() {
+    if (number.addEventListener('click', function() {
         if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
             newNum = '';
             decimalClick = 0;
@@ -82,7 +83,30 @@ numberBtn.forEach((number) => {
         equalClick = 0;
         minusClick = 0;
         
-    })
+    }));
+
+    else if (number.addEventListener('keypress', function(e){
+        console.log(e);
+        if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
+            newNum = '';
+            decimalClick = 0;
+        }
+
+        if (minusClick){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
+            newNum = isMinus;
+            isMinus = '';
+        }
+        
+        if(number.value == e.key){
+            newNum += number.value;
+        }
+        
+        newNum = parseFloat(newNum); //converts newNum from string to number.
+        displayBox.textContent = newNum;
+        
+        equalClick = 0;
+        minusClick = 0;
+    }));
 });
 
 minusBtn.addEventListener('click', function(){
@@ -99,7 +123,6 @@ decimalBtn.addEventListener('click', function(){
         newNum = newNum.toString();
         newNum = newNum.concat(decimal)
         displayBox.textContent = newNum;
-        console.log(newNum);
     }
 });
 
