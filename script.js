@@ -66,10 +66,10 @@ let decimal = '.';
 
 
 numberBtn.forEach((number) => {
-    number.addEventListener('click', () => addNumber(number), false);
+    number.addEventListener('click', () => inputNumber(number), false);
 });
 
-function addNumber (number){
+function inputNumber (number){
     if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
             newNum = '';
             decimalClick = 0;
@@ -87,10 +87,8 @@ function addNumber (number){
         newNum = newNum.slice(0, -1);
     }
     
-    
     newNum = parseFloat(newNum); //converts newNum from string to number.
-
-
+    
     displayBox.textContent = newNum;
     
     equalClick = 0;
@@ -116,18 +114,19 @@ decimalBtn.addEventListener('click', function(){
 });
 
 operatorBtn.forEach((operator) => {
-    operator.addEventListener('click', function() {
-        newNum = parseFloat(newNum);
-        if (newNum && storedNum){  //If storedNum exists, it allows the operate() to be carried out when an operator btn is clicked again.
-            equality();
-        }
-        storedNum = newNum;
-        newNum = '';
-        opSelected = operator.value;
-        decimalClick = 0;
-        opStored = operator;
-    })
+    operator.addEventListener('click', () => opBtnClicked(operator), false);
 });
+
+function opBtnClicked (operator){
+    newNum = parseFloat(newNum);
+    if (newNum && storedNum){  //If storedNum exists, it allows the operate() to be carried out when an operator btn is clicked again.
+        equality();
+    }
+    storedNum = newNum;
+    newNum = '';
+    opSelected = operator.value;
+    decimalClick = 0;
+}
 
 equalBtn.addEventListener('click', function(){
     ++equalClick;
@@ -146,10 +145,9 @@ function equality(){
         storedNum = '';
     }
 
-    newNum = newNum.toString();
+    newNum = newNum.toString(); //long solutions are converted to scientific notation
     if (newNum.length > 14){
         newNum = parseFloat(newNum).toExponential(2);
-        console.log(newNum);
     }
    
     if (displayBox.textContent === 'Error'){ //makes sure 'Error' is displayed if newNum = infiinity. 
@@ -167,3 +165,17 @@ backspaceBtn.addEventListener('click', function(){
     newNum = parseInt(newNum);
 })
 
+window.addEventListener('keypress', function(e){
+    const numberKey = document.querySelector(`.number[data-key="${e.keyCode}"]`);
+    number = numberKey;
+    if (numberKey){
+        inputNumber(number);
+    }
+    console.log(e);
+    const operatorKey = document.querySelector(`.operator[data-key="${e.keyCode}"]`);
+    operator = operatorKey;
+    if (operatorKey){
+        opBtnClicked(operator);
+    }
+    
+});
