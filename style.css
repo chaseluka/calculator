@@ -72,7 +72,7 @@ button {
     font-size: 25px;
 }
 
-.on, #equal {
+.operator, #equal {
     background-color: #5552eea8;
     color: #eee;
 }
