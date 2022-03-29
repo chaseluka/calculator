@@ -64,28 +64,39 @@ let decimal = '.';
 //querySelector returns a NodeList, which can use array.forEach to decipher the  
 //number associated with the button and display its value.
 
+
 numberBtn.forEach((number) => {
-    if (number.addEventListener('click', function() {
-        if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
+    number.addEventListener('click', () => addNumber(number), false);
+});
+
+function addNumber (number){
+    if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
             newNum = '';
             decimalClick = 0;
-        }
+    }
 
-        if (minusClick){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
-            newNum = isMinus;
-            isMinus = '';
-        }
-        
-        newNum += number.value;
+    if (minusClick){  //If minusBtn is clicked while newNum is NaN, newNum will add the minus value to the number. 
+        newNum = isMinus;
+        isMinus = '';
+    }
+    
+    newNum += number.value;
+    
+    newNum = newNum.toString(); 
+    if (newNum.length > 14){    //prevents numbers from flowing over the display when input.
+        newNum = newNum.slice(0, -1);
+    }
+    
+    
+    newNum = parseFloat(newNum); //converts newNum from string to number.
 
-        newNum = parseFloat(newNum); //converts newNum from string to number.
-        displayBox.textContent = newNum;
-        
-        equalClick = 0;
-        minusClick = 0;
-        
-    }));
-});
+
+    displayBox.textContent = newNum;
+    
+    equalClick = 0;
+    minusClick = 0;
+}
+
 
 minusBtn.addEventListener('click', function(){
     if (newNum === '' || isNaN(newNum)){
