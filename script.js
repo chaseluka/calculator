@@ -145,11 +145,19 @@ function equality(){
         newNum = '';
         storedNum = '';
     }
+
+    newNum = newNum.toString();
     if (newNum.length > 14){
-        newNum = newNum.substring(0, 14);
+        newNum = parseFloat(newNum).toExponential(2);
+        console.log(newNum);
     }
-    newNum = parseFloat((newNum).toFixed(8)); //Rounds decimal to only 8 spots.
-    displayBox.textContent = newNum;
+   
+    if (displayBox.textContent === 'Error'){ //makes sure 'Error' is displayed if newNum = infiinity. 
+        displayBox.textContent = 'Error';
+    }
+    else if (displayBox.textContent !== 'Error'){
+        displayBox.textContent = newNum;
+    }
 }
 
 backspaceBtn.addEventListener('click', function(){
