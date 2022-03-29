@@ -45,11 +45,13 @@ function operate (operator, num1, num2){
 
 //Clears the display so that the div has no text content.
 
-clearBtn.addEventListener('click', function(){
+clearBtn.addEventListener('click', clear, false);
+
+function clear(){
     displayBox.textContent = '';
     newNum = '';
     storedNum = '';
-});
+}
 
 let newNum = '';
 let storedNum;
@@ -104,14 +106,16 @@ minusBtn.addEventListener('click', function(){
     }
 })
 
-decimalBtn.addEventListener('click', function(){
+decimalBtn.addEventListener('click', decimalInput, false);
+
+function decimalInput(){
     if (decimalClick < 1){
         decimalClick++;
         newNum = newNum.toString();
         newNum = newNum.concat(decimal)
         displayBox.textContent = newNum;
     }
-});
+}
 
 operatorBtn.forEach((operator) => {
     operator.addEventListener('click', () => opBtnClicked(operator), false);
@@ -158,12 +162,14 @@ function equality(){
     }
 }
 
-backspaceBtn.addEventListener('click', function(){
+backspaceBtn.addEventListener('click', backspace, false);
+
+function backspace(){
     newNum = newNum.toString();
     newNum = newNum.slice(0, -1);
     displayBox.textContent = newNum;
     newNum = parseInt(newNum);
-})
+}
 
 window.addEventListener('keypress', function(e){
     const numberKey = document.querySelector(`.number[data-key="${e.keyCode}"]`);
@@ -172,10 +178,39 @@ window.addEventListener('keypress', function(e){
         inputNumber(number);
     }
     console.log(e);
+
     const operatorKey = document.querySelector(`.operator[data-key="${e.keyCode}"]`);
     operator = operatorKey;
     if (operatorKey){
         opBtnClicked(operator);
+    }
+
+    const equalKey = document.querySelector(`#equal[data-key="${e.keyCode}"]`);
+    if (equalKey){
+        ++equalClick;
+        if (newNum !== undefined && storedNum !== undefined){
+            equality();
+            storedNum = '';
+        }
+    }
+
+    const decimalKey = document.querySelector(`#decimal[data-key="${e.code}"]`);
+    if (decimalKey){
+        decimalInput();
+    }
+
+
+});
+
+window.addEventListener('keydown', function(e){
+    const backspaceKey = document.querySelector(`#backspace[data-key="${e.keyCode}"]`);
+    if (backspaceKey){
+        backspace();
+    }
+
+    const clearKey = document.querySelector(`#clear[data-key="${e.code}"]`);
+    if (clearKey){
+        clear();
     }
     
 });
