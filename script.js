@@ -42,16 +42,7 @@ function operate (operator, num1, num2){
     }
 };
 
-
-//Clears the display so that the div has no text content.
-
-clearBtn.addEventListener('click', clear, false);
-
-function clear(){
-    displayBox.textContent = '';
-    newNum = '';
-    storedNum = '';
-}
+//Adjustable variables to be used by functions.
 
 let newNum = '';
 let storedNum;
@@ -62,14 +53,7 @@ let minusClick = 0;
 let decimalClick = 0;
 let decimal = '.';
 
-//Allows each button's number to be displayed when button clicked. Given that 
-//querySelector returns a NodeList, which can use array.forEach to decipher the  
-//number associated with the button and display its value.
-
-
-numberBtn.forEach((number) => {
-    number.addEventListener('click', () => inputNumber(number), false);
-});
+//Functions for all addEventListeners below.
 
 function inputNumber (number){
     if (equalClick || isNaN(newNum)){    //if equal button pressed, set newNum to be empty so user can input a number avoids string being added onto continously. Also, if newNum is a number from clicking 'backspace', set newNum to ''.
@@ -97,17 +81,6 @@ function inputNumber (number){
     minusClick = 0;
 }
 
-
-minusBtn.addEventListener('click', function(){
-    if (newNum === '' || isNaN(newNum)){
-        isMinus = '-';
-        displayBox.textContent = isMinus;
-        minusClick++;
-    }
-})
-
-decimalBtn.addEventListener('click', decimalInput, false);
-
 function decimalInput(){
     if (decimalClick < 1){
         decimalClick++;
@@ -116,10 +89,6 @@ function decimalInput(){
         displayBox.textContent = newNum;
     }
 }
-
-operatorBtn.forEach((operator) => {
-    operator.addEventListener('click', () => opBtnClicked(operator), false);
-});
 
 function opBtnClicked (operator){
     newNum = parseFloat(newNum);
@@ -132,15 +101,6 @@ function opBtnClicked (operator){
     decimalClick = 0;
 }
 
-equalBtn.addEventListener('click', function(){
-    ++equalClick;
-    if (newNum !== undefined && storedNum !== undefined){
-        equality();
-        storedNum = '';
-
-    }
-});
-
 function equality(){
     newNum = operate(opSelected, storedNum, newNum);
     if (newNum === Infinity){  //Prevents crashing when dividing a number by zero
@@ -148,7 +108,7 @@ function equality(){
         newNum = '';
         storedNum = '';
     }
-
+    newNum = parseFloat((newNum).toFixed(8));
     newNum = newNum.toString(); //long solutions are converted to scientific notation
     if (newNum.length > 14){
         newNum = parseFloat(newNum).toExponential(2);
@@ -162,8 +122,6 @@ function equality(){
     }
 }
 
-backspaceBtn.addEventListener('click', backspace, false);
-
 function backspace(){
     newNum = newNum.toString();
     newNum = newNum.slice(0, -1);
@@ -171,13 +129,59 @@ function backspace(){
     newNum = parseInt(newNum);
 }
 
+function clear(){    //Clears the display so that the div has no text content.
+    displayBox.textContent = '';
+    newNum = '';
+    storedNum = '';
+}
+
+//Allows each button's number to be displayed when button clicked. Given that 
+//querySelector returns a NodeList, which can use array.forEach to decipher the  
+//number associated with the button and display its value.
+
+//All addEventListners below.
+
+numberBtn.forEach((number) => {
+    number.addEventListener('click', () => inputNumber(number), false);
+});
+
+minusBtn.addEventListener('click', function(){
+    if (newNum === '' || isNaN(newNum)){
+        isMinus = '-';
+        displayBox.textContent = isMinus;
+        minusClick++;
+    }
+})
+
+decimalBtn.addEventListener('click', decimalInput, false);
+
+operatorBtn.forEach((operator) => {
+    operator.addEventListener('click', () => opBtnClicked(operator), false);
+});
+
+equalBtn.addEventListener('click', function(){
+    ++equalClick;
+    if (newNum !== undefined && storedNum !== undefined){
+        equality();
+        storedNum = '';
+
+    }
+});
+
+backspaceBtn.addEventListener('click', backspace, false);
+
+
+clearBtn.addEventListener('click', clear, false);  
+
+//Allows keyboard input for all necessary options of calculator. Keypress is required
+//for printable keys and keydown for non printable keys. 
+
 window.addEventListener('keypress', function(e){
     const numberKey = document.querySelector(`.number[data-key="${e.keyCode}"]`);
     number = numberKey;
     if (numberKey){
         inputNumber(number);
     }
-    console.log(e);
 
     const operatorKey = document.querySelector(`.operator[data-key="${e.keyCode}"]`);
     operator = operatorKey;
@@ -198,7 +202,6 @@ window.addEventListener('keypress', function(e){
     if (decimalKey){
         decimalInput();
     }
-
 
 });
 
